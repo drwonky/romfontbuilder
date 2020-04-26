@@ -11,7 +11,7 @@
 char *charlist = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNMOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 
 int xbm_char_height=18;
-int rom_char_height=16;
+int rom_glyph_half=8;
 
 unsigned char reverse(unsigned char b) {
    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
@@ -44,15 +44,15 @@ int main(void)
 
 	while(*p) {
 		c=*p;
-		d=(c-'!')*18;
+		d=(c-'!')*xbm_char_height;
 
-		fseek(out, (c*8)+2048,SEEK_SET);
-		for(i=0;i<8;i++) {
+		fseek(out, (c*rom_glyph_half)+2048,SEEK_SET);
+		for(i=0;i<rom_glyph_half;i++) {
 			n=reverse(comic_sans_bits[d+i]);
 			fwrite(&n,1,1,out);
 		}
-		fseek(out, (c*8)+2048+4096,SEEK_SET);
-		for(i=8;i<16;i++) {
+		fseek(out, (c*rom_glyph_half)+2048+4096,SEEK_SET);
+		for(i=rom_glyph_half;i<2*rom_glyph_half;i++) {
 			n=reverse(comic_sans_bits[d+i]);
 			fwrite(&n,1,1,out);
 		}
