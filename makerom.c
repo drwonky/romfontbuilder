@@ -5,13 +5,14 @@
  *      Author: pedward
  */
 
-#include "comic_sans.xbm"
 #include <stdio.h>
 
-char *charlist = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNMOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+#include "text.xbm"
+#include "chars.h"
 
 int xbm_char_height=18;
 int rom_glyph_half=8;
+int baseline_offset=3;
 
 unsigned char reverse(unsigned char b) {
    b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
@@ -48,12 +49,12 @@ int main(void)
 
 		fseek(out, (c*rom_glyph_half)+2048,SEEK_SET);
 		for(i=0;i<rom_glyph_half;i++) {
-			n=reverse(comic_sans_bits[d+i]);
+			n=reverse(text_bits[d+i+baseline_offset]);
 			fwrite(&n,1,1,out);
 		}
 		fseek(out, (c*rom_glyph_half)+2048+4096,SEEK_SET);
 		for(i=rom_glyph_half;i<2*rom_glyph_half;i++) {
-			n=reverse(comic_sans_bits[d+i]);
+			n=reverse(text_bits[d+i+baseline_offset]);
 			fwrite(&n,1,1,out);
 		}
 		p++;
